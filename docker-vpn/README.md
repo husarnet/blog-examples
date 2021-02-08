@@ -41,7 +41,10 @@ description:
 - `JOINCODE='fc94:b01d:1803:8dd8:3333:2222:1234:1111/xxxxxxxxxxxxxxxxx'` - is an unique Join Code from your Husarnet network. You will find it at **https://app.husarnet.com -> choosen network -> `[Add element]` button ->  `join code` tab**
 - `-v my-container-1-v:/var/lib/husarnet` - you need to make `/var/lib/husarnet` as a volume to preserve it's state for example if you would like to update the image your container is based on. If you would like to run multiple containers on your host machine remember to provide unique volume name for each container (in our case `HOSTNAME-v`).
 
-If you also want to modify `index.html` file in your IDE, and see changes in your container, create a bind mount by adding also this flag in the `docker run command`: `-v "/home/blog-examples/docker-vpn/src:/var/www/html/:ro" \` (if you cloned the repo directly to your home folder on Linux).
+If you also want to modify `index.html` file in your IDE, and see changes in your container, create a bind mount by adding also this flag in the `docker run command`: ```bash
+-v "/home/blog-examples/docker-vpn/src:/var/www/html/:ro" \
+```
+remember to provide a full path to your `src` folder! 
 
 
 ## Result
@@ -49,7 +52,16 @@ If you also want to modify `index.html` file in your IDE, and see changes in you
 After running a container you should see a log like this:
 
 ```bash
-docker-example$ sudo docker run --rm -it --env HOSTNAME='my-container-1' --env JOINCODE='fc94:b01d:1803:8dd8:b293:5c7d:7639:1111/xxxxxxxxxxxxxxxxx' -v my-container-1-v:/var/lib/husarnet -v /dev/net/tun:/dev/net/tun --cap-add NET_ADMIN --sysctl net.ipv6.conf.all.disable_ipv6=0 docker-example
+blog-examples/docker-vpn$ sudo docker run --rm -it \
+> --env HOSTNAME='docker-vpn-1' \
+> --env JOINCODE='fc94:b01d:1803:8dd8:b293:5c7d:7639:932a/xxxxxxxxxxxxxxxxxxxxxx' \
+> -v docker-vpn-v:/var/lib/husarnet \
+> -v "/home/blog-examples/docker-vpn/src:/var/www/html/:ro" \
+> -v /dev/net/tun:/dev/net/tun \
+> --cap-add NET_ADMIN \
+> --sysctl net.ipv6.conf.all.disable_ipv6=0 \
+> docker-vpn
+sysctl: setting key "net.ipv6.conf.lo.disable_ipv6": Read-only file system
 
 ⏳ [1/2] Initializing Husarnet Client:
 waiting...
@@ -58,9 +70,9 @@ waiting...
 waiting...
 success
 
-🔥 [2/2] Connecting to Husarnet network as "my-container-1":
-[693849] joining...
-[695852] joining...
+🔥 [2/2] Connecting to Husarnet network as "docker-vpn-1":
+[101617015] joining...
+[101619016] joining...
 done
 
 *******************************************
@@ -70,6 +82,6 @@ To access a webserver visit:
 in your web browser 💻
 *******************************************
 
-root@7740bd7e1bd4:/#
+root@3fb1b9a13cba:/# 
 ```
 
