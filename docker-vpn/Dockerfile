@@ -1,4 +1,4 @@
-FROM ubuntu:20.10
+FROM ubuntu:21.10
 
 # install Husarnet client
 RUN apt update -y && \
