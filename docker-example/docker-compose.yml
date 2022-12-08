@@ -1,0 +1,21 @@
+version: "2.3"  # https://docs.docker.com/compose/compose-file/
+services:
+  husarnet-ssh:
+    build: ./
+    volumes:
+      - husarnet-ssh-v:/var/lib/husarnet  # This will persist your Husarnet Client keys, thus IP of the container will be stable/the same between boots
+      - husarnet-ssh-keys:/srv/sshd  # This will persist your SSH server keys. Useful only for example, not required for the VPN client itself
+    env_file: 
+      - ./.env  # create .env file in the same folder as Dockerfile and specify HOSTNAME and JOINCODE there
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+    cap_add: 
+      - NET_ADMIN
+    devices:  
+      - /dev/net/tun
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+
+volumes:
+  husarnet-ssh-v:
+  husarnet-ssh-keys:

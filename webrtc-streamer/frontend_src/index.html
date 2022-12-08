@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>WebRTC Demo</title>
+
+    <!-- Font Awesome 5 -->
+    <link rel="stylesheet" href="/fontawesome/css/all.css" />
+
+    <!-- Janus dependencies -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
+    <script type="text/javascript" src="/webrtc-adapter/adapter.js"></script>
+    <script type="text/javascript" src="janus.js"></script>
+    <script type="text/javascript" src="utils.js"></script>
+    <script type="text/javascript" src="websocket_client.js"></script>
+
+    <!-- Bootstrap 4 dependencies -->
+    <script src="/jquery/jquery-3.6.0.min.js"></script>
+    <script src="/bootstrap-5.0.0-beta2-dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/bootstrap-5.0.0-beta2-dist/css/bootstrap.min.css">
+
+    <!-- START A STREAM -->
+    <script type="text/javascript">
+        // from utils.js
+        $(document).ready(function () {
+            WebSocketBegin();
+        });
+    </script>
+
+</head>
+
+<body>
+    <div class="container-xxl" id="streams">
+        <nav class="navbar bg-light border">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="https://husarnet.com/"><img src="/husarnet_signet.svg" height="40" /></a>
+                <span class="navbar-text">WebRTC Streamer Demo</span>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span><i class="fas fa-cog"></i></span>
+                </button>
+                <div class="collapse navbar-collapse border bg-dark" id="navbarNavDarkDropdown">
+                    <ul class="navbar-nav">
+                        <div class="row g-4 m-2">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <select class="form-select" id="size_select" aria-label="Select Camera Resolution">
+                                    </select>
+                                    <label for="size_select">Select Resolution</label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-floating">
+                                    <select class="form-select" id="fps_select"
+                                        aria-label="Select Camera Frames Per Second">
+                                    </select>
+                                    <label for="fps_select">Select FPS</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-4 m-2">
+                            <div class="col">
+                                <button type="submit" class="btn-lg btn-primary mb-2" id="submit_btn">Update
+                                    Settings</button>
+                            </div>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="card" id="main-card">
+            <div class="card-img p-1" id="stream" style="height: 80vh;"></div>
+            <div class="card-img-overlay">
+                <p class="card-text">
+                <div class="row">
+                    <div class="col-4">
+                        <span class="badge rounded-pill bg-success text-white" id="status"></span>
+                        <span class="badge rounded-pill bg-info text-dark" id="curres"></span>
+                        <span class="badge rounded-pill bg-warning text-dark" id="curbitrate"></span>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div class="btn-group" role="group" aria-label="Basic outlined example">
+                            <button class="btn btn-outline-secondary bg-light" id="audio_btn"><i
+                                    class="fas fa-volume-mute"></i></button>
+                            <button class="btn btn-outline-secondary bg-light" autocomplete="off" id="watch"><i
+                                    class="fas fa-video"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+                </p>
+            </div>
+            <div class="card-footer bg-light" id="p2p_connection"></div>
+        </div>
+    </div>
+</body>
+
+</html>
