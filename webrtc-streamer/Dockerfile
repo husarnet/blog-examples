@@ -1,7 +1,7 @@
 FROM ubuntu:22.04
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN apt update -y && apt install -y curl gnupg2 systemd ffmpeg build-essential libmicrohttpd-dev libjansson-dev libnice-dev libssl-dev libsofia-sip-ua-dev libglib2.0-dev libopus-dev libogg-dev libini-config-dev libcollection-dev pkg-config gengetopt libtool autotools-dev automake libconfig-dev git make sudo iputils-ping vim
+RUN apt update -y && apt install -y curl gnupg2 nginx systemd ffmpeg build-essential libmicrohttpd-dev libjansson-dev libnice-dev libssl-dev libsofia-sip-ua-dev libglib2.0-dev libopus-dev libogg-dev libini-config-dev libcollection-dev pkg-config gengetopt libtool autotools-dev automake libconfig-dev git make sudo iputils-ping vim
 RUN curl -s https://install.husarnet.com/install.sh | bash
 
 # Install libsrtp
