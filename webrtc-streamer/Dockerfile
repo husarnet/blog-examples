@@ -32,7 +32,7 @@ RUN rm -rf /var/www/html/favicon.ico
 RUN apt install -y v4l-utils alsa-utils
 
 # install python dependencies
-RUN sudo apt install python3 python-pkg-resources python3-pkg-resources python3-pip
+RUN sudo apt install python3 python-pkg-resources python3-pkg-resources python3-pip -y
 RUN pip3 install websockets
 
 # Husarnet credentials. Find your JOINCODE at https://app.husarnet.com
