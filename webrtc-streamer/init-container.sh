@@ -35,7 +35,6 @@ function print_instruction() {
     echo ""
 }
 
-sysctl net.ipv6.conf.lo.disable_ipv6=0
 
 if [[ ${JOINCODE} == "" ]]; then
     echo ""
@@ -46,8 +45,8 @@ if [[ ${JOINCODE} == "" ]]; then
 fi
 
 echo ""
-echo "🔥 [2/2] Connecting to Husarnet network as \"${HOSTNAME}\":"
-husarnet join ${JOINCODE} ${HOSTNAME}
+echo "🔥 Connecting to Husarnet network as \"${HOSTNAME}\":"
+husarnet-daemon && husarnet join ${JOINCODE} ${HOSTNAME} &
 echo "done"
 echo ""
 
