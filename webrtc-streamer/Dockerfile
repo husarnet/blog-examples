@@ -23,10 +23,7 @@ RUN cd ~ && \
     sudo make install && \
     sudo make configs
 
-RUN cd /var
-RUN mkdir www
-RUN cd www && mkdir html
-RUN cp -r /opt/janus/share/janus/demos/. /var/www/html
+RUN mkdir -p /var/www/html && cp -r /opt/janus/share/janus/demos/. /var/www/html
 RUN rm -rf /var/www/html/favicon.ico
 
 # utility to list and change control options for a camera, eg.
