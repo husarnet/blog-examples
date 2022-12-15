@@ -46,7 +46,7 @@ fi
 
 echo ""
 echo "🔥 Connecting to Husarnet network as \"${HOSTNAME}\":"
-husarnet-daemon && husarnet join ${JOINCODE} ${HOSTNAME} &
+husarnet-daemon 2>/dev/null & && husarnet join ${JOINCODE} ${HOSTNAME} &
 echo "done"
 echo ""
 
