@@ -1,47 +1,8 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
+ARG DEBIAN_FRONTEND=noninteractive
 
-# install Husarnet client
-RUN apt update -y && \
-    apt install -y curl && \
-    apt install -y gnupg2 && \
-    apt install -y systemd && \
-    curl https://install.husarnet.com/install.sh | bash
-
-RUN update-alternatives --set ip6tables /usr/sbin/ip6tables-nft
-
-# install webserver service
-RUN apt install -y nginx
-
-# ffmpeg
-RUN apt-get update -y && \
-    apt-get install -y ffmpeg
-
-# Install janus dependencies
-RUN apt-get install -y \
-    build-essential \
-    libmicrohttpd-dev \
-    libjansson-dev \
-    libnice-dev \
-    libssl-dev \
-    libsofia-sip-ua-dev \
-    libglib2.0-dev \
-    libopus-dev \
-    libogg-dev \
-    libini-config-dev \
-    libcollection-dev \
-    pkg-config \
-    gengetopt \
-    libtool \
-    autotools-dev \
-    automake \
-    libconfig-dev
-
-RUN apt install -y \
-	git \
-	make \
-	sudo \
-    iputils-ping \
-    vim
+RUN apt update -y && apt install -y curl gnupg2 nginx systemd ffmpeg build-essential libmicrohttpd-dev libjansson-dev libnice-dev libssl-dev libsofia-sip-ua-dev libglib2.0-dev libopus-dev libogg-dev libini-config-dev libcollection-dev pkg-config gengetopt libtool autotools-dev automake libconfig-dev git make sudo iputils-ping vim
+RUN curl -s https://install.husarnet.com/install.sh | bash
 
 # Install libsrtp
 RUN cd ~ && \
@@ -54,28 +15,26 @@ RUN cd ~ && \
 
 # Install janus
 RUN cd ~ && \
-    git clone https://github.com/meetecho/janus-gateway.git && \
-    cd janus-gateway && \
+    git clone https://github.com/meetecho/janus-gateway && \
+	cd janus-gateway && \
+	git checkout '0.x' && \
     sh autogen.sh && \
     ./configure --disable-websockets --disable-data-channels --disable-rabbitmq --disable-docs --prefix=/opt/janus && \
     make && \
     sudo make install && \
     sudo make configs
 
-RUN cp -r /opt/janus/share/janus/demos/. /var/www/html
+RUN mkdir -p /var/www/html && cp -r /opt/janus/share/janus/demos/. /var/www/html
 RUN rm -rf /var/www/html/favicon.ico
 
 # utility to list and change control options for a camera, eg.
 # v4l2-ctl -d /dev/video0 --list-ctrls
 # v4l2-ctl --set-ctrl=exposure_auto=1
-RUN apt install -y v4l-utils
-RUN apt install -y alsa-utils
+RUN apt install -y v4l-utils alsa-utils
 
 # install python dependencies
-RUN apt install python3.8 -y && \
-    apt install python-pkg-resources python3-pkg-resources -y && \
-    apt install python3-pip -y && \
-    pip3 install websockets
+RUN sudo apt install python3 python-pkg-resources python3-pkg-resources python3-pip -y
+RUN pip3 install websockets
 
 # Husarnet credentials. Find your JOINCODE at https://app.husarnet.com
 ENV JOINCODE=""
@@ -106,4 +65,3 @@ COPY backend_src /app/
 
 # initialize a container
 CMD /opt/init-container.sh
-

@@ -35,7 +35,6 @@ function print_instruction() {
     echo ""
 }
 
-sysctl net.ipv6.conf.lo.disable_ipv6=0
 
 if [[ ${JOINCODE} == "" ]]; then
     echo ""
@@ -46,24 +45,8 @@ if [[ ${JOINCODE} == "" ]]; then
 fi
 
 echo ""
-echo "⏳ [1/2] Initializing Husarnet Client:"
-husarnet daemon > /dev/null 2>&1 &
-
-for i in {1..10}
-do
-    sleep 1
-    
-    output=$( get_status < <(husarnet status) )
-    echo "$output"
-    
-    if [[ $output != "waiting..." ]]; then
-        break
-    fi
-done
-
-echo ""
-echo "🔥 [2/2] Connecting to Husarnet network as \"${HOSTNAME}\":"
-husarnet join ${JOINCODE} ${HOSTNAME}
+echo "🔥 Connecting to Husarnet network as \"${HOSTNAME}\":"
+(husarnet-daemon 2>/dev/null &) && husarnet join ${JOINCODE} ${HOSTNAME} -y
 echo "done"
 echo ""
 
