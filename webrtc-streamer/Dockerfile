@@ -15,7 +15,7 @@ RUN cd ~ && \
 
 # Install janus
 RUN cd ~ && \
-    git clone https://github.com/meetecho/janus-gateway.git && \
+    git clone https://github.com/meetecho/janus-gateway && \
 	git checkout 414edcae7955b924f8a434909fafe243c2ad8d6c && \
     cd janus-gateway && \
     sh autogen.sh && \
