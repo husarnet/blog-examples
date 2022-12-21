@@ -1,35 +1,9 @@
 #!/bin/bash
-
-function get_status() {
-    local status="success"
-
-    while read line; do
-        if [[ $line == *"ERROR"* ]]; then
-            status="waiting..."
-        fi
-    done
-    echo $status
-}
-
-function get_ipv6() {
-    local ipv6addr="::"
-    
-    while read line; do
-        if [[ $line == *"Husarnet IP address:"* ]]; then
-            ipv6addr=${line#*"Husarnet IP address: "}
-        fi
-    done
-    
-    echo $ipv6addr
-}
-
 function print_instruction() {
-    local ipv6addr=$( get_ipv6 )
-    
     echo "*******************************************"
     echo "💡 Tip"
     echo "To access a live video stream visit:"
-    echo "👉 http://[${ipv6addr}]:80/ 👈"
+    echo "👉 http://${HOSTNAME} 👈"
     echo "in your web browser 💻" 
     echo "*******************************************"
     echo ""
@@ -46,7 +20,7 @@ fi
 
 echo ""
 echo "🔥 Connecting to Husarnet network as \"${HOSTNAME}\":"
-(husarnet-daemon 2>/dev/null &) && husarnet join ${JOINCODE} ${HOSTNAME} -y
+(husarnet-daemon 2>/dev/null &) && husarnet daemon wait joinable && husarnet join ${JOINCODE} ${HOSTNAME}
 echo "done"
 echo ""
 
