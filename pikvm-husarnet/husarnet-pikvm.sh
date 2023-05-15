@@ -11,10 +11,10 @@ pacman -Syyu --noconfirm
 # install Husarnet client
 curl -s https://install.husarnet.com/install.sh | sudo bash
 # set up required husarnet hooks to switch between rw and ro filesystem
-mkdir /var/lib/husarnet/hook.rw_request.d
+mkdir -p /var/lib/husarnet/hook.rw_request.d
 echo '#!/bin/bash' > /var/lib/husarnet/hook.rw_request.d/rw.sh
 echo 'rw' >> /var/lib/husarnet/hook.rw_request.d/rw.sh
-mkdir /var/lib/husarnet/hook.rw_release.d
+mkdir -p /var/lib/husarnet/hook.rw_release.d
 echo '#!/bin/bash' > /var/lib/husarnet/hook.rw_release.d/ro.sh
 echo 'ro' >> /var/lib/husarnet/hook.rw_release.d/ro.sh
 chmod +x /var/lib/husarnet/hook*/*
