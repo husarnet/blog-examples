@@ -1,25 +1,43 @@
 #!/bin/bash
-if [[ ${UID} -ne 0 ]]
-then
-echo "You are not root user. Run this script as root!"
-exit 1
+set -euo pipefail
+
+if [[ ${UID} -ne 0 ]]; then
+    echo "You are not root user. Run this script as root!"
+    exit 1
 fi
-# mount piKVM filesystem in read/write mode
+
+echo "If you encounter errors update piKVM OS packages, using:"
+echo "pacman -Syyu --noconfirm"
+
+# piKVM specific: Setup required Husarnet hooks to switch between rw and ro filesystem automatically
 rw
-#
-# update piKVM OS packages if script for some reason doesn't work correctly
-#
-# pacman -Syyu --noconfirm 
-#
-# install Husarnet client
-curl -s https://install.husarnet.com/install.sh | sudo bash
-# set up required husarnet hooks to switch between rw and ro filesystem
+
 mkdir -p /var/lib/husarnet/hook.rw_request.d
-echo '#!/bin/bash' > /var/lib/husarnet/hook.rw_request.d/rw.sh
-echo 'rw' >> /var/lib/husarnet/hook.rw_request.d/rw.sh
 mkdir -p /var/lib/husarnet/hook.rw_release.d
-echo '#!/bin/bash' > /var/lib/husarnet/hook.rw_release.d/ro.sh
-echo 'ro' >> /var/lib/husarnet/hook.rw_release.d/ro.sh
-chmod +x /var/lib/husarnet/hook*/*
-husarnet daemon hooks enable
-reboot
+
+cat << 'EOF' > /var/lib/husarnet/hook.rw_request.d/rw.sh
+#!/bin/bash
+rw
+EOF
+
+cat << 'EOF' > /var/lib/husarnet/hook.rw_release.d/ro.sh
+#!/bin/bash
+ro
+EOF
+
+chmod +x /var/lib/husarnet/hook.rw_request.d/rw.sh
+chmod +x /var/lib/husarnet/hook.rw_release.d/ro.sh
+
+cat << 'EOF' > /var/lib/husarnet/config.json
+{
+    "user-settings": {
+        "enableHooks": "true"
+    }
+}
+EOF
+
+# Actually install Husarnet client
+curl -s https://install.husarnet.com/install.sh | sudo bash -
+
+# Back to readonly mode
+ro
