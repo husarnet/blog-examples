@@ -9,6 +9,10 @@ RUN apt update -y && \
 
 RUN update-alternatives --set ip6tables /usr/sbin/ip6tables-nft
 
+# legacy xtables support for ipv4 and ipv6
+RUN update-alternatives --set iptables /usr/sbin/iptables-legacy
+RUN update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+
 # install webserver service
 RUN apt install -y nginx
 
