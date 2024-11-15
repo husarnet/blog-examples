@@ -37,7 +37,9 @@ cat << 'EOF' > /var/lib/husarnet/config.json
 EOF
 
 # Actually install Husarnet client
-curl -s https://install.husarnet.com/install.sh | sudo bash -
+cd /tmp
+wget https://nightly.husarnet.com/pacman/armv7h/husarnet-2.0.295-armv7h.pkg -O /tmp/husarnet_pikvm.pkg
+pacman -U /tmp/husarnet_pikvm.pkg --noconfirm
 
 # Back to readonly mode
 ro
